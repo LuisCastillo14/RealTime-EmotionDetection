@@ -13,8 +13,8 @@ type PersonResult = {
 
 const INITIAL_INTERVAL_MS = 500;
 
-const VIDEO_WIDTH = 800;
-const VIDEO_HEIGHT = 600;
+const VIDEO_WIDTH = 480;
+const VIDEO_HEIGHT = 360;
 
 
 const EMOTIONS = ["neutral", "happiness", "surprise", "sadness", "anger", "disgust", "fear"] as const;
