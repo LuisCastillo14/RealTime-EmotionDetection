@@ -8,7 +8,11 @@ router = APIRouter()
 async def analyze_image_route(file: UploadFile = File(...)):
     if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="El archivo debe ser una imagen.")
+
+    # 🔧 Parche: aseguramos que el archivo esté al inicio antes de leerlo
+    await file.seek(0)
     return await analyze_image(file)
+
 
 # ---------- NUEVO ----------
 @router.post("/analyze-frame")

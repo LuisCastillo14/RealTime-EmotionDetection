@@ -32,8 +32,11 @@ CLASS_NAMES = get_class_names(NUM_CLASSES)
 
 # ========== Utilidades ==========
 def read_image_to_rgb(file_bytes: bytes) -> np.ndarray:
-    img = Image.open(io.BytesIO(file_bytes)).convert("RGB")
-    return np.array(img)
+    try:
+        img = Image.open(io.BytesIO(file_bytes)).convert("RGB")
+        return np.array(img)
+    except Exception as e:
+        raise ValueError(f"No se pudo leer la imagen: {e}")
 
 def detect_faces(img_rgb: np.ndarray):
     detections = detector.detect_faces(img_rgb)
@@ -87,5 +90,8 @@ def analyze_bytes(file_bytes: bytes) -> Dict:
 
 # ========== Compatibilidad con endpoint anterior ==========
 async def analyze_image(file) -> Dict:
+    await file.seek(0)  # <-- por seguridad
     file_bytes = await file.read()
+    if not file_bytes:
+        raise ValueError("Archivo vacío o no válido")
     return analyze_bytes(file_bytes)
