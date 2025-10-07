@@ -23,4 +23,5 @@ COPY . /app
 RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8080
-CMD gunicorn -k uvicorn.workers.UvicornWorker -w 1 -b 0.0.0.0:${PORT} app.main:app
+CMD gunicorn -k uvicorn.workers.UvicornWorker -w 1 -b 0.0.0.0:${PORT:-8080} app.main:app
+
