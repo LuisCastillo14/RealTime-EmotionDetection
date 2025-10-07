@@ -9,14 +9,6 @@ backend/venv/
 backend/*.pyc
 backend/.mypy_cache/
 
-# Modelos y datasets
-backend/app/model/*.h5
-backend/app/model/*.hdf5
-backend/app/model/*.pb
-*.pkl
-*.npz
-*.npy
-
 # Archivos de entorno
 *.env
 .env.*
