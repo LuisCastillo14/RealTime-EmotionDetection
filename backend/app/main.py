@@ -9,8 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://gestioneventosv1-fac46.web.app",  # tu frontend en Firebase
-    "https://<TU_DOMINIO_PERSONAL>.com",       # opcional si luego usas dominio propio
+    "https://real-time-emotion-detection-seven.vercel.app/",  # tu frontend en Firebase
+    "https://real-time-emotion-detection-seven.vercel.app",       # opcional si luego usas dominio propio
 ]
 
 app.add_middleware(
