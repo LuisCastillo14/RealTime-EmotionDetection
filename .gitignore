@@ -1,0 +1,18 @@
+# Node / React
+frontend/node_modules/
+frontend/dist/
+
+# Python / FastAPI
+backend/__pycache__/
+backend/.venv/
+backend/venv/
+backend/*.pyc
+backend/.mypy_cache/
+
+# Archivos de entorno
+*.env
+.env.*
+
+# Logs
+*.log
+backend/debug_face_*.jpg
