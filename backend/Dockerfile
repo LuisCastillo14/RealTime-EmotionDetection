@@ -22,8 +22,5 @@ COPY . /app
 # Instalar dependencias de Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Exponer el puerto (Railway usará $PORT automáticamente)
 EXPOSE 8080
-
-# Comando para iniciar tu app
 CMD gunicorn -k uvicorn.workers.UvicornWorker -w 1 -b 0.0.0.0:${PORT} app.main:app
