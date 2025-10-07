@@ -5,7 +5,7 @@ import ImageWithBoxes from "../../components/ImageWithBoxes";
 
 interface PersonResult {
   id: number;
-  bbox: number[]; // [x, y, w, h]
+  bbox: number[]; // coordenadas
   emotion: string;
   confidence: number;
   all_probs: Record<string, number>;

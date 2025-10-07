@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\Luis\Desktop\Material UPAO\CICLO 10\Taller II\Proyecto\RealTime-EmotionDetection\backend\.venv"
+VIRTUAL_ENV="E:\PROYECTOS\Material UPAO\CICLO 10\Taller II\Proyecto\RealTime-EmotionDetection\backend\.venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
