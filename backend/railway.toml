@@ -9,4 +9,10 @@ TF_CPP_MIN_LOG_LEVEL = "2"
 startCommand = "gunicorn -k uvicorn.workers.UvicornWorker -w 1 -b 0.0.0.0:$PORT app.main:app"
 
 [packages]
-apt = ["libgl1", "libglib2.0-0"]
+apt = [
+  "libgl1",
+  "libglib2.0-0",
+  "libsm6",
+  "libxrender1",
+  "libxext6"
+]
