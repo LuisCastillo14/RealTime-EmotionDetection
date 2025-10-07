@@ -11,7 +11,7 @@ type PersonResult = {
   all_probs?: Record<string, number>;
 };
 
-const INITIAL_INTERVAL_MS = 200;
+const INITIAL_INTERVAL_MS = 500;
 
 const VIDEO_WIDTH = 800;
 const VIDEO_HEIGHT = 600;
@@ -51,9 +51,7 @@ const WebcamPage: React.FC = () => {
   const [dashboardVisible, setDashboardVisible] = useState(false); // 👈 nuevo flag de animación
 
   const isProcessingRef = useRef(false);
-  const dynamicInterval = useRef(INITIAL_INTERVAL_MS);
   const loopTimeout = useRef<number | null>(null);
-  const lastDuration = useRef<number>(0);
   const streamRef = useRef<MediaStream | null>(null);
 
   const [stats, setStats] = useState<StatMap>(makeEmptyStats());
@@ -152,7 +150,6 @@ const WebcamPage: React.FC = () => {
     cctx.drawImage(v, 0, 0, cap.width, cap.height);
 
     isProcessingRef.current = true;
-    const start = performance.now();
 
     try {
       const blob: Blob = await new Promise((resolve) =>
@@ -165,28 +162,23 @@ const WebcamPage: React.FC = () => {
     } catch (e) {
       console.error("Error analizando frame:", e);
     } finally {
-      const end = performance.now();
-      lastDuration.current = end - start;
-
-      if (lastDuration.current > 250)
-        dynamicInterval.current = Math.min(dynamicInterval.current + 100, 1000);
-      else if (lastDuration.current < 150)
-        dynamicInterval.current = Math.max(dynamicInterval.current - 50, 150);
-
       isProcessingRef.current = false;
     }
   };
 
+
   // =========================
   // Loop adaptativo
   // =========================
-  const startAdaptiveLoop = () => {
+  const startFixedLoop = () => {
     if (!isDetecting) return;
+
     const loop = async () => {
       if (isDetecting) await captureAndSendFrame();
-      loopTimeout.current = window.setTimeout(loop, dynamicInterval.current);
     };
-    loop();
+
+    // Repite con velocidad fija
+    loopTimeout.current = window.setInterval(loop, INITIAL_INTERVAL_MS );
   };
 
   // =========================
@@ -260,17 +252,13 @@ const WebcamPage: React.FC = () => {
   // Control pestaña
   // =========================
   useEffect(() => {
-    const handleVisibility = () => {
-      if (document.hidden && loopTimeout.current) {
-        window.clearTimeout(loopTimeout.current);
-        loopTimeout.current = null;
-      } else if (!document.hidden && isDetecting && !loopTimeout.current) {
-        startAdaptiveLoop();
-      }
-    };
-    document.addEventListener("visibilitychange", handleVisibility);
-    return () => document.removeEventListener("visibilitychange", handleVisibility);
-  }, [isDetecting]);
+  if (isDetecting) {
+    startFixedLoop();
+  } else if (loopTimeout.current) {
+    window.clearInterval(loopTimeout.current);
+    loopTimeout.current = null;
+  }
+}, [isDetecting]);
 
   // =========================
   // Botón Iniciar / Finalizar
@@ -303,9 +291,10 @@ const WebcamPage: React.FC = () => {
 
   // loop principal
   useEffect(() => {
-    if (isDetecting) startAdaptiveLoop();
-    else if (loopTimeout.current) {
-      window.clearTimeout(loopTimeout.current);
+    if (isDetecting) {
+      startFixedLoop();
+    } else if (loopTimeout.current) {
+      window.clearInterval(loopTimeout.current);
       loopTimeout.current = null;
     }
   }, [isDetecting]);
